@@ -11,8 +11,8 @@
 
 [[redirects]]
   from = "/README"
-  to = "https://github.com/UsmanovMahmudkhan/campus-auth-java/blob/main/README.md"
-  status = 302
+  to = "/"
+  status = 301
 
 [[redirects]]
   from = "/release"
