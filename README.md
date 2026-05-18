@@ -1,184 +1,165 @@
 <div align="center">
+  <a href="https://commons.wikimedia.org/wiki/File:Sejong_univ.png">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/0/0f/Sejong_univ.png" alt="Sejong University logo" width="104" />
+  </a>
   <h1>Campus Auth Java</h1>
-  <p><b>A lightweight, robust, and extensible Java library for campus member account authentication.</b></p>
+  <p><b>A lightweight Java library and CLI for campus member account authentication workflows.</b></p>
 
-  <!-- Badges -->
   <p>
-    <img src="https://img.shields.io/badge/Java-11%2B-blue?logo=java&logoColor=white" alt="Java 11+" />
-    <img src="https://img.shields.io/badge/Maven-3.8%2B-red?logo=apachemaven&logoColor=white" alt="Maven" />
+    <img src="https://img.shields.io/badge/Java-11%2B-blue?logo=openjdk&logoColor=white" alt="Java 11+" />
+    <img src="https://img.shields.io/badge/Maven-3.8%2B-red?logo=apachemaven&logoColor=white" alt="Maven 3.8+" />
+    <img src="https://img.shields.io/badge/Release-v0.2.7-0f766e" alt="Release v0.2.7" />
     <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License: MIT" />
+  </p>
+
+  <p>
+    <a href="https://campus-auth-java.netlify.app">Documentation</a>
+    ·
+    <a href="https://campus-auth-java.netlify.app/quickstart/">Quickstart</a>
+    ·
+    <a href="https://github.com/UsmanovMahmudkhan/campus-auth-java/releases/tag/v0.2.7">Latest release</a>
   </p>
 </div>
 
----
+> This project is not affiliated with, endorsed by, or officially maintained by Sejong University.
 
-## About The Project
+## Table of Contents
 
-**Campus Auth Java** is a high-performance library and CLI tool designed to perform login checks against various supported campus services. It elegantly abstracts away the complex session management, HTML parsing, and HTTP requests required to authenticate and extract metadata for campus members. 
+- [About](#about)
+- [Features](#features)
+- [Quickstart](#quickstart)
+- [CLI Usage](#cli-usage)
+- [Java API](#java-api)
+- [Authentication Methods](#authentication-methods)
+- [Security and Disclaimer](#security-and-disclaimer)
+- [Documentation](#documentation)
+- [Contributing](#contributing)
 
-Whether you need to verify student credentials for a club app or extract major/grade information for a custom portal, this library provides a clean, unified API returning structured JSON responses.
+## About
 
-## Key Features
+**Campus Auth Java** wraps session-based campus login checks behind a small Java 11 toolkit. It handles HTTP requests, cookies, redirects, HTML parsing, fallback authentication methods, and structured JSON output so applications can make clear decisions from authentication results.
 
-- **Multiple Authentication Strategies:** Support for Portal SSO, Classic Sessions, Moodler, and DoSejong.
-- **Structured JSON Results:** Consistent response formats including success state, status codes, and user metadata (name, major, grade, etc.).
-- **Smart Fallback:** A "Manual" mode that intelligently cascades through authenticators until a definite result is found.
-- **Extensible Architecture:** Easily add new authenticators for different campus endpoints.
-- **CLI & Library Support:** Use it programmatically in your Java applications or directly from the terminal.
-- **Lightweight:** Minimal dependencies, leveraging native Java `HttpClient` and JSoup for fast HTML parsing.
+Use it when you need a local CLI or Java API for authorized campus-account verification experiments, club tools, or research prototypes.
 
-## Tech Stack
+## Features
 
-- **Language:** Java 11
-- **Build Tool:** Maven 3.8+
-- **HTTP Client:** Native `java.net.http.HttpClient`
-- **HTML Parser:** JSoup (1.17.2)
+- **Multiple authentication strategies:** Portal SSO, Classic Session, Moodler Session, and DoSejong Session.
+- **Manual fallback mode:** Try supported methods in order until a definite result is found.
+- **Structured JSON output:** Consistent success, status, result code, authenticator, and metadata fields.
+- **Library and CLI support:** Use from Java code or package a runnable shaded jar.
+- **Small dependency surface:** Java `HttpClient` plus JSoup for HTML parsing.
+- **Extensible design:** Add new authenticators behind the shared `Authenticator` contract.
 
-## Folder Structure
-
-```text
-campus-auth-java/
-├── src/
-│   └── main/
-│       └── java/
-│           └── campus/auth/java/
-│               ├── Main.java                # CLI Entry Point
-│               ├── AuthService.java         # Core Authentication Service
-│               ├── AuthMethod.java          # Authenticator Enums
-│               ├── AuthResult.java          # Result Data Models
-│               ├── authenticators/          # Authentication Implementations
-│               └── exceptions/              # Custom Exceptions
-├── pom.xml                                  # Maven Configuration
-├── LICENSE                                  # MIT License
-└── README.md                                # Project Documentation
-```
-
-## Getting Started
+## Quickstart
 
 ### Prerequisites
 
-- **Java Development Kit (JDK) 11** or higher
-- **Apache Maven 3.8** or higher
+- JDK 11 or newer
+- Maven 3.8 or newer
 
-### Installation
+### Build
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/UsmanovMahmudkhan/campus-auth-java.git
-   cd campus-auth-java
-   ```
-
-2. **Build the project:**
-   Compile the source code and package it into a fat jar.
-   ```bash
-   mvn clean package
-   ```
-   This will generate a shaded jar file at `target/campus-auth-java-0.3.4.jar`.
-
-## Usage Guide
-
-### 1. Command Line Interface (CLI)
-
-The CLI outputs a structured JSON string containing the authentication result.
-
-**Basic Usage (Automatic Fallback):**
-Uses the default sequence (`PortalSSOToken` -> `ClassicSession` -> `MoodlerSession` -> `DosejongSession`).
 ```bash
-java -jar target/campus-auth-java-0.3.4.jar <student_id> <password>
+git clone https://github.com/UsmanovMahmudkhan/campus-auth-java.git
+cd campus-auth-java
+mvn clean package
 ```
 
-**Interactive Password Prompt:**
-Omit the password to be prompted securely.
-```bash
-java -jar target/campus-auth-java-0.3.4.jar <student_id>
+The shaded jar is generated at:
+
+```text
+target/campus-auth-java-0.2.7.jar
 ```
 
-**Specific Authenticators:**
+## CLI Usage
+
+Run automatic fallback mode:
+
 ```bash
-java -jar target/campus-auth-java-0.3.4.jar <student_id> <password> PortalSSOToken
-java -jar target/campus-auth-java-0.3.4.jar <student_id> <password> PortalSSOToken,DosejongSession
+java -jar target/campus-auth-java-0.2.7.jar <student_id> <password>
 ```
 
-### 2. Using as a Library
+Use the interactive password prompt:
 
-Include the classes in your project and call `AuthService`.
+```bash
+java -jar target/campus-auth-java-0.2.7.jar <student_id>
+```
+
+Run one or more selected authenticators:
+
+```bash
+java -jar target/campus-auth-java-0.2.7.jar <student_id> <password> PortalSSOToken
+java -jar target/campus-auth-java-0.2.7.jar <student_id> <password> PortalSSOToken,DosejongSession
+```
+
+## Java API
 
 ```java
-import campus.auth.java.AuthResult;
-import campus.auth.java.AuthService;
 import campus.auth.java.AuthMethod;
 import campus.auth.java.AuthResponse;
+import campus.auth.java.AuthResult;
+import campus.auth.java.AuthService;
 
 public class App {
     public static void main(String[] args) {
-        // Manual fallback mode
-        AuthResult result = AuthService.authenticate("student_id", "password");
-        System.out.println(result.toJson());
+        AuthResult fallback = AuthService.authenticate("student_id", "password");
+        System.out.println(fallback.toJson());
 
-        // Specific authenticator
-        AuthResponse portalResult = AuthService.authenticate(
-            "student_id", 
-            "password", 
+        AuthResponse portal = AuthService.authenticate(
+            "student_id",
+            "password",
             AuthMethod.PORTAL_SSO_TOKEN
         );
-        System.out.println(portalResult.getIsAuth());
+        System.out.println(portal.getIsAuth());
     }
 }
 ```
 
-#### Implemented Authenticators
+## Authentication Methods
 
-| Method | Description | Extracted Metadata |
+| Method | Purpose | Extracted Metadata |
 | :--- | :--- | :--- |
-| `PortalSSOToken` | Checks campus portal SSO token behavior via Blackboard. | Authentication Status |
-| `ClassicSession` | Checks Daeyang Humanity College session. | Classic Reading Certification |
-| `MoodlerSession` | Checks SJULMS Moodler session login. | Name, Major |
-| `DosejongSession`| Checks Do Sejong session login. | Name, Major |
-| `Manual`         | Cascades through all methods. | Varies by successful method |
+| `Manual` | Cascades through supported methods. | Varies by successful method |
+| `PortalSSOToken` | Checks portal SSO token behavior via Blackboard. | Authentication status |
+| `ClassicSession` | Checks Daeyang Humanity College session flow. | Classic reading certification |
+| `MoodlerSession` | Checks SJULMS Moodler session login. | Name, major |
+| `DosejongSession` | Checks Do Sejong session login. | Name, major |
 
-_Legacy Helpers available in `LegacyAuth` for backward compatibility (`dosejongApi`, `uisApi`, `sjlmsApi`)._
+Legacy helper methods remain available in `LegacyAuth` for backward compatibility: `dosejongApi`, `uisApi`, and `sjlmsApi`.
 
-## Environment Variables
+## Security and Disclaimer
 
-This project currently does not strictly require any `.env` configurations. All credentials are passed directly via CLI arguments or method parameters. 
-> **Security Warning:** Never hardcode or commit real credentials to your version control system.
+Credentials are passed at runtime through CLI arguments, an interactive prompt, or Java method calls. Never hardcode real credentials, commit `.env` files, or use the project against accounts or services you are not authorized to test.
+
+This project is provided strictly for educational, research, and authorized testing purposes only.
+
+It must not be used for illegal activities, unauthorized access, privacy violations, abuse, harassment, disruption of services, or any activity that violates applicable laws, platform rules, or third-party rights.
+
+The developer does not encourage, support, or take responsibility for any misuse of this project. Users are solely responsible for how they use, modify, or distribute this code. By using this project, you agree that you are responsible for ensuring your actions are legal, ethical, and authorized.
+
+If you are unsure whether your use is allowed, do not use this project.
 
 ## Documentation
 
-- [Documentation website](docs/index.html): production-style docs site for the toolkit.
-- [README.md](README.md): project overview, build steps, and usage examples.
-- [CHANGELOG.md](CHANGELOG.md): version history.
-- [RELEASE_NOTES.md](RELEASE_NOTES.md): release summary for the current version.
-- [LICENSE](LICENSE): MIT license terms.
-
-## Roadmap
-
-- [ ] Add asynchronous authentication support via `CompletableFuture`.
-- [ ] Implement robust retry mechanisms for intermittent network timeouts.
-- [ ] Create a comprehensive suite of Unit and Integration Tests.
-- [ ] Publish library to Maven Central.
-
-## Known Limitations
-
-- **Timeout Restrictions:** HTTP requests are hard-coded to a 3-second timeout.
-- **DOM Dependency:** `JSoup` HTML parsing relies on the current structure of the university web pages. Upstream UI changes may break metadata extraction.
+- [Documentation website](https://campus-auth-java.netlify.app)
+- [Quickstart](https://campus-auth-java.netlify.app/quickstart/)
+- [API guide](https://campus-auth-java.netlify.app/api/)
+- [Security notes](SECURITY.md)
+- [Roadmap](ROADMAP.md)
+- [Changelog](CHANGELOG.md)
+- [Release notes](RELEASE_NOTES.md)
 
 ## Contributing
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+Contributions are welcome when they improve reliability, safety, documentation, or maintainability. Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request and follow the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Distributed under the MIT License. See [LICENSE](LICENSE) for details.
 
 ## Author
 
 **Mahmudkhan Usmanov**
+
 - GitHub: [@UsmanovMahmudkhan](https://github.com/UsmanovMahmudkhan)
-- LinkedIn: [Mahmudkhan Usmanov](https://www.linkedin.com/in/mahmudkhonusmonov/)
+- LinkedIn: [Mahmudkhan Usmanov](https://www.linkedin.com/in/mahmudkhon-u-57b202249/)

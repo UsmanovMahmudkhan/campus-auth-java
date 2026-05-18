@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Auth Methods | Campus Auth Java</title>
+    <meta name="description" content="Supported Campus Auth Java authenticator methods." />
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body data-page="auth-methods">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="topbar"><div class="topbar__inner"><a class="brand" href="/"><span class="brand__mark">CA</span><span>Campus Auth Java</span></a><nav class="top-actions"><a href="/quickstart/">Quickstart</a><a href="/api/">API</a><a href="https://github.com/UsmanovMahmudkhan/campus-auth-java">GitHub</a></nav><button class="menu-button" type="button" aria-expanded="false" aria-controls="sidebar"><span></span><span></span><span></span></button></div></header>
+    <div class="docs-shell">
+      <aside class="sidebar" id="sidebar" aria-label="Documentation navigation"><div class="sidebar__group"><p class="sidebar__label">Get started</p><a href="/" data-nav="home">Overview</a><a href="/quickstart/" data-nav="quickstart">Quickstart</a><a href="/api/" data-nav="api">API guide</a></div><div class="sidebar__group"><p class="sidebar__label">Concepts</p><a href="/auth-methods/" data-nav="auth-methods">Auth methods</a><a href="/security/" data-nav="security">Security and use</a></div><div class="sidebar__group"><p class="sidebar__label">Project</p><a href="/releases/" data-nav="releases">Releases</a><a href="/contributing/" data-nav="contributing">Contributing</a></div></aside>
+      <main class="doc-main" id="main">
+        <article>
+          <p class="doc-kicker">Auth methods</p>
+          <h1>Understand what each authenticator can prove.</h1>
+          <p class="lead">Each campus service has different behavior, metadata, redirects, and failure shapes. The method you choose determines what the library can verify and what information it can return.</p>
+
+          <h2 id="fallback">Manual fallback</h2>
+          <p>`Manual` is the default for most callers. It runs the configured sequence and stops when an authenticator returns a definite authentication result. This helps when one endpoint is down, one page changes, or one service cannot expose enough information by itself.</p>
+          <div class="callout"><p><strong>Use fallback when:</strong> you care more about a reliable yes/no answer than about which exact campus service produced it.</p></div>
+
+          <h2 id="methods">Supported methods</h2>
+          <div class="method-list">
+            <section class="method-card"><header><h3><code>PortalSSOToken</code></h3><span class="meta">Authentication status</span></header><p>Checks portal SSO token behavior through the Blackboard-related flow. It is useful when the integration only needs to know whether credentials can pass an SSO gate.</p></section>
+            <section class="method-card"><header><h3><code>ClassicSession</code></h3><span class="meta">Certification metadata</span></header><p>Uses a session-based Daeyang Humanity College flow. It can expose profile and reading-certification details when the upstream page returns the expected structure.</p></section>
+            <section class="method-card"><header><h3><code>MoodlerSession</code></h3><span class="meta">Name and major</span></header><p>Uses the LMS login flow and checks the member panel. It is useful when an application needs basic identity metadata after successful authentication.</p></section>
+            <section class="method-card"><header><h3><code>DosejongSession</code></h3><span class="meta">Name and major</span></header><p>Uses a DoSejong session login and extracts account information from the service page when present.</p></section>
+            <section class="method-card"><header><h3><code>LegacyAuth</code></h3><span class="meta">Compatibility helpers</span></header><p>Provides older helper-style methods such as `dosejongApi`, `uisApi`, and `sjlmsApi`. New code should prefer `AuthService` for clearer response handling.</p></section>
+          </div>
+
+          <h2 id="selection">Selection guidance</h2>
+          <p>Pick the narrowest method that gives your application the required answer. If the application needs metadata, choose a method that can extract it. If the application only needs a credential decision, fallback mode is usually more resilient.</p>
+          <table class="field-table"><thead><tr><th>Need</th><th>Recommended path</th><th>Why</th></tr></thead><tbody><tr><td>Most reliable credential decision</td><td>`Manual`</td><td>Can continue when one service cannot decide.</td></tr><tr><td>SSO status only</td><td>`PortalSSOToken`</td><td>Checks the SSO-oriented flow directly.</td></tr><tr><td>Name or major metadata</td><td>`MoodlerSession` or `DosejongSession`</td><td>These flows can expose profile fields.</td></tr><tr><td>Older integration compatibility</td><td>`LegacyAuth`</td><td>Preserves historical helper methods.</td></tr></tbody></table>
+
+          <div class="footer-nav"><a href="/api/">Previous: API guide</a><a href="/security/">Next: Security</a></div>
+        </article>
+      </main>
+      <aside class="toc" aria-label="On this page"><p class="toc__label">On this page</p><a href="#fallback">Manual fallback</a><a href="#methods">Methods</a><a href="#selection">Selection</a></aside>
+    </div>
+    <script src="/app.js" defer></script>
+  </body>
+</html>

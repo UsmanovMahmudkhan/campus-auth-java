@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Quickstart | Campus Auth Java</title>
+    <meta name="description" content="Build and run Campus Auth Java from source." />
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body data-page="quickstart">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="topbar"><div class="topbar__inner"><a class="brand" href="/"><span class="brand__mark">CA</span><span>Campus Auth Java</span></a><nav class="top-actions"><a href="/quickstart/">Quickstart</a><a href="/api/">API</a><a href="https://github.com/UsmanovMahmudkhan/campus-auth-java">GitHub</a></nav><button class="menu-button" type="button" aria-expanded="false" aria-controls="sidebar"><span></span><span></span><span></span></button></div></header>
+    <div class="docs-shell">
+      <aside class="sidebar" id="sidebar" aria-label="Documentation navigation"><div class="sidebar__group"><p class="sidebar__label">Get started</p><a href="/" data-nav="home">Overview</a><a href="/quickstart/" data-nav="quickstart">Quickstart</a><a href="/api/" data-nav="api">API guide</a></div><div class="sidebar__group"><p class="sidebar__label">Concepts</p><a href="/auth-methods/" data-nav="auth-methods">Auth methods</a><a href="/security/" data-nav="security">Security and use</a></div><div class="sidebar__group"><p class="sidebar__label">Project</p><a href="/releases/" data-nav="releases">Releases</a><a href="/contributing/" data-nav="contributing">Contributing</a></div></aside>
+      <main class="doc-main" id="main">
+        <article>
+          <p class="doc-kicker">Quickstart</p>
+          <h1>Build the jar, run a credential check, and read the JSON result.</h1>
+          <p class="lead">The quickest path is to package the Maven project into a shaded jar. You can then run automatic fallback mode from the terminal or pass one explicit authenticator.</p>
+
+          <h2 id="requirements">Requirements</h2>
+          <ul class="check-list"><li>JDK 11 or newer.</li><li>Maven 3.8 or newer.</li><li>Authorization to test the account and campus services involved.</li><li>No real credentials stored in shell history, source files, screenshots, issues, or logs.</li></ul>
+
+          <h2 id="install">Install from source</h2>
+          <p>Clone the repository and run the Maven package task. The project uses the Maven Shade Plugin so the output jar includes JSoup and can be executed directly.</p>
+          <div class="code-block"><div class="code-block__header"><span>Shell</span><button type="button" data-copy="git clone https://github.com/UsmanovMahmudkhan/campus-auth-java.git&#10;cd campus-auth-java&#10;mvn clean package">Copy</button></div><pre><code>git clone https://github.com/UsmanovMahmudkhan/campus-auth-java.git
+cd campus-auth-java
+mvn clean package</code></pre></div>
+          <p>The generated artifact is `target/campus-auth-java-0.2.7.jar`.</p>
+
+          <h2 id="run">Run the CLI</h2>
+          <p>Manual fallback mode is the default. It tries the configured authenticator sequence and returns the first definite authentication result.</p>
+          <div class="code-block"><div class="code-block__header"><span>Automatic fallback</span><button type="button" data-copy="java -jar target/campus-auth-java-0.2.7.jar &lt;student_id&gt; &lt;password&gt;">Copy</button></div><pre><code>java -jar target/campus-auth-java-0.2.7.jar &lt;student_id&gt; &lt;password&gt;</code></pre></div>
+          <p>For safer local usage, omit the password and enter it at the prompt.</p>
+          <div class="code-block"><div class="code-block__header"><span>Interactive password</span><button type="button" data-copy="java -jar target/campus-auth-java-0.2.7.jar &lt;student_id&gt;">Copy</button></div><pre><code>java -jar target/campus-auth-java-0.2.7.jar &lt;student_id&gt;</code></pre></div>
+
+          <h2 id="choose-method">Choose a method</h2>
+          <p>Use a single method when you know exactly which campus flow you want to validate. Use a comma-separated list when your application wants a smaller fallback sequence.</p>
+          <div class="code-block"><div class="code-block__header"><span>Selected authenticators</span><button type="button" data-copy="java -jar target/campus-auth-java-0.2.7.jar &lt;student_id&gt; &lt;password&gt; PortalSSOToken,DosejongSession">Copy</button></div><pre><code>java -jar target/campus-auth-java-0.2.7.jar &lt;student_id&gt; &lt;password&gt; PortalSSOToken
+java -jar target/campus-auth-java-0.2.7.jar &lt;student_id&gt; &lt;password&gt; PortalSSOToken,DosejongSession</code></pre></div>
+
+          <h2 id="interpret">Interpret the result</h2>
+          <p>Do not treat every unsuccessful service interaction as an authentication failure. Check `success`, `is_auth`, and `code` separately so outages, timeouts, and parsing changes are handled correctly.</p>
+          <div class="steps"><section class="step"><h3>Check `success`</h3><p>If `success` is false, the service flow failed before a reliable credential decision could be made.</p></section><section class="step"><h3>Check `is_auth`</h3><p>If it is true or false, the authenticator produced a definite credential result. If it is null, continue fallback or show an unknown state.</p></section><section class="step"><h3>Use `code` for branching</h3><p>Result codes are meant for program logic, logs, and user-facing error mapping.</p></section></div>
+
+          <div class="footer-nav"><a href="/">Previous: Overview</a><a href="/api/">Next: API guide</a></div>
+        </article>
+      </main>
+      <aside class="toc" aria-label="On this page"><p class="toc__label">On this page</p><a href="#requirements">Requirements</a><a href="#install">Install</a><a href="#run">Run</a><a href="#choose-method">Choose method</a><a href="#interpret">Interpret result</a></aside>
+    </div>
+    <script src="/app.js" defer></script>
+  </body>
+</html>

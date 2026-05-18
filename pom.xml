@@ -5,7 +5,7 @@
 
     <groupId>campus.auth</groupId>
     <artifactId>campus-auth-java</artifactId>
-    <version>0.3.4</version>
+    <version>0.2.7</version>
     <packaging>jar</packaging>
 
     <name>campus-auth-java</name>

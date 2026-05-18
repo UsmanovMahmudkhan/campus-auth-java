@@ -12,7 +12,7 @@ public final class Main {
 
     public static void main(String[] args) {
         if (args.length < 1 || args.length > 3) {
-            System.err.println("Usage: java -jar campus-auth-java-0.3.4.jar <id> [password] [method]");
+            System.err.println("Usage: java -jar campus-auth-java-0.2.7.jar <id> [password] [method]");
             System.err.println("Methods: Manual, PortalSSOToken, ClassicSession, MoodlerSession, DosejongSession");
             System.exit(2);
         }

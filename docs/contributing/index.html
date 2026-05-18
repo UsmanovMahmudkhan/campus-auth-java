@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Contributing | Campus Auth Java</title>
+    <meta name="description" content="Contribution guide for Campus Auth Java." />
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body data-page="contributing">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="topbar"><div class="topbar__inner"><a class="brand" href="/"><span class="brand__mark">CA</span><span>Campus Auth Java</span></a><nav class="top-actions"><a href="/quickstart/">Quickstart</a><a href="/api/">API</a><a href="https://github.com/UsmanovMahmudkhan/campus-auth-java">GitHub</a></nav><button class="menu-button" type="button" aria-expanded="false" aria-controls="sidebar"><span></span><span></span><span></span></button></div></header>
+    <div class="docs-shell">
+      <aside class="sidebar" id="sidebar" aria-label="Documentation navigation"><div class="sidebar__group"><p class="sidebar__label">Get started</p><a href="/" data-nav="home">Overview</a><a href="/quickstart/" data-nav="quickstart">Quickstart</a><a href="/api/" data-nav="api">API guide</a></div><div class="sidebar__group"><p class="sidebar__label">Concepts</p><a href="/auth-methods/" data-nav="auth-methods">Auth methods</a><a href="/security/" data-nav="security">Security and use</a></div><div class="sidebar__group"><p class="sidebar__label">Project</p><a href="/releases/" data-nav="releases">Releases</a><a href="/contributing/" data-nav="contributing">Contributing</a></div></aside>
+      <main class="doc-main" id="main">
+        <article>
+          <p class="doc-kicker">Contributing</p>
+          <h1>Improve the toolkit without weakening safety boundaries.</h1>
+          <p class="lead">Good contributions make the project clearer, safer, easier to test, or more reliable. Contributions should not expand the project toward unauthorized access, bypass guidance, or credential misuse.</p>
+
+          <h2 id="workflow">Contribution workflow</h2>
+          <div class="steps"><section class="step"><h3>Set up locally</h3><p>Clone the repository, install JDK 11 or newer, and run `mvn clean package`.</p></section><section class="step"><h3>Make a focused change</h3><p>Keep behavior, docs, and refactors separate when practical so review stays clear.</p></section><section class="step"><h3>Verify and document</h3><p>Update README, changelog, or docs pages when behavior changes, and explain the verification in the pull request.</p></section></div>
+
+          <h2 id="authenticator-changes">Authenticator changes</h2>
+          <p>Authenticator work needs extra care because it touches credential flows. New methods should use explicit timeouts, avoid logging secrets, return stable result codes, and treat unexpected page shapes as unknown or parse failures.</p>
+          <div class="callout"><p><strong>Review expectation:</strong> a new authenticator should be easy to mock, easy to reason about, and safe when an upstream service changes.</p></div>
+
+          <h2 id="community-files">Community files</h2>
+          <div class="path-grid">
+            <a class="path-card" href="https://github.com/UsmanovMahmudkhan/campus-auth-java/blob/main/CONTRIBUTING.md"><h3>CONTRIBUTING.md</h3><p>Setup, branch, pull request, and authenticator guidance.</p></a>
+            <a class="path-card" href="https://github.com/UsmanovMahmudkhan/campus-auth-java/blob/main/CODE_OF_CONDUCT.md"><h3>CODE_OF_CONDUCT.md</h3><p>Community standards, reporting, and enforcement expectations.</p></a>
+            <a class="path-card" href="https://github.com/UsmanovMahmudkhan/campus-auth-java/blob/main/SECURITY.md"><h3>SECURITY.md</h3><p>Supported version, responsible disclosure, and credential safety.</p></a>
+            <a class="path-card" href="https://github.com/UsmanovMahmudkhan/campus-auth-java/blob/main/ROADMAP.md"><h3>ROADMAP.md</h3><p>Testing, retries, async API, Maven Central, and safer integration goals.</p></a>
+          </div>
+
+          <h2 id="before-pr">Before opening a PR</h2>
+          <ul class="check-list"><li>Run `mvn clean package`.</li><li>Confirm no credentials, cookies, private identifiers, or personal data are included.</li><li>Update docs and changelog when behavior changes.</li><li>Explain what changed, why it changed, and how it was verified.</li></ul>
+          <div class="footer-nav"><a href="/releases/">Previous: Releases</a><span></span></div>
+        </article>
+      </main>
+      <aside class="toc" aria-label="On this page"><p class="toc__label">On this page</p><a href="#workflow">Workflow</a><a href="#authenticator-changes">Authenticator changes</a><a href="#community-files">Community files</a><a href="#before-pr">Before PR</a></aside>
+    </div>
+    <script src="/app.js" defer></script>
+  </body>
+</html>

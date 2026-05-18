@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Releases | Campus Auth Java</title>
+    <meta name="description" content="Release history for Campus Auth Java." />
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body data-page="releases">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="topbar"><div class="topbar__inner"><a class="brand" href="/"><span class="brand__mark">CA</span><span>Campus Auth Java</span></a><nav class="top-actions"><a href="/quickstart/">Quickstart</a><a href="/api/">API</a><a href="https://github.com/UsmanovMahmudkhan/campus-auth-java">GitHub</a></nav><button class="menu-button" type="button" aria-expanded="false" aria-controls="sidebar"><span></span><span></span><span></span></button></div></header>
+    <div class="docs-shell">
+      <aside class="sidebar" id="sidebar" aria-label="Documentation navigation"><div class="sidebar__group"><p class="sidebar__label">Get started</p><a href="/" data-nav="home">Overview</a><a href="/quickstart/" data-nav="quickstart">Quickstart</a><a href="/api/" data-nav="api">API guide</a></div><div class="sidebar__group"><p class="sidebar__label">Concepts</p><a href="/auth-methods/" data-nav="auth-methods">Auth methods</a><a href="/security/" data-nav="security">Security and use</a></div><div class="sidebar__group"><p class="sidebar__label">Project</p><a href="/releases/" data-nav="releases">Releases</a><a href="/contributing/" data-nav="contributing">Contributing</a></div></aside>
+      <main class="doc-main" id="main">
+        <article>
+          <p class="doc-kicker">Releases</p>
+          <h1>Five corrected public releases, with v0.2.7 as latest.</h1>
+          <p class="lead">The release line documents the project’s growth from the initial Java toolkit to the current documentation-focused release. The mistaken higher release is intentionally removed from the public release story.</p>
+
+          <h2 id="latest">Latest release</h2>
+          <section class="release-card"><header><h3><code>v0.2.7</code></h3><span class="meta">Latest</span></header><p>Polished README, community health files, multi-page Netlify documentation, corrected version references, and release hygiene.</p></section>
+
+          <h2 id="history">Release history</h2>
+          <div class="release-list">
+            <section class="release-card"><header><h3><code>v0.2.6</code></h3><span class="meta">Docs preparation</span></header><p>Documentation website, deployment configuration, release notes, and responsible-use disclaimer.</p></section>
+            <section class="release-card"><header><h3><code>v0.2.0</code></h3><span class="meta">Authenticator expansion</span></header><p>Portal SSO, Classic Session, Moodler Session, DoSejong Session, fallback mode, structured responses, and legacy helpers.</p></section>
+            <section class="release-card"><header><h3><code>v0.1.1</code></h3><span class="meta">CLI polish</span></header><p>Interactive password prompt, structured JSON output, result codes, and clearer usage messages.</p></section>
+            <section class="release-card"><header><h3><code>v0.1.0</code></h3><span class="meta">Initial toolkit</span></header><p>Java 11 Maven project, core service, method enum, JSoup dependency, MIT license, and baseline documentation.</p></section>
+          </div>
+
+          <h2 id="release-checks">Release checks</h2>
+          <p>Every release should build with Maven, keep command examples aligned with the Maven version, and avoid publishing credentials or private service data. The latest release should be the only version advertised in top-level badges and docs examples.</p>
+          <div class="code-block"><div class="code-block__header"><span>Release verification</span><button type="button" data-copy="mvn clean package&#10;rg '0\\.3\\.4' . -g '!target/**'">Copy</button></div><pre><code>mvn clean package
+rg '0\.3\.4' . -g '!target/**'</code></pre></div>
+          <div class="footer-nav"><a href="/security/">Previous: Security</a><a href="/contributing/">Next: Contributing</a></div>
+        </article>
+      </main>
+      <aside class="toc" aria-label="On this page"><p class="toc__label">On this page</p><a href="#latest">Latest</a><a href="#history">History</a><a href="#release-checks">Release checks</a></aside>
+    </div>
+    <script src="/app.js" defer></script>
+  </body>
+</html>
