@@ -11,6 +11,7 @@ This release introduces the first complete Java package for `campus-auth-java`.
 - Library API for calling authentication flows directly from Java applications.
 - Multiple authenticator strategies with manual fallback support.
 - Structured result objects for success state, authentication state, status code, result code, metadata, and authenticator name.
+- Production-style documentation website under `docs/`.
 - MIT license, GitHub-ready README, changelog, release notes, and Java-focused `.gitignore`.
 
 ### Build

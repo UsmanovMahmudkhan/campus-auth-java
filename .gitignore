@@ -22,6 +22,7 @@ bin/
 
 .DS_Store
 Thumbs.db
+.playwright-cli/
 
 *.pyc
 __pycache__/

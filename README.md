@@ -145,6 +145,7 @@ This project currently does not strictly require any `.env` configurations. All 
 
 ## Documentation
 
+- [Documentation website](docs/index.html): production-style docs site for the toolkit.
 - [README.md](README.md): project overview, build steps, and usage examples.
 - [CHANGELOG.md](CHANGELOG.md): version history.
 - [RELEASE_NOTES.md](RELEASE_NOTES.md): release summary for the current version.
