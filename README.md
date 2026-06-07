@@ -131,11 +131,9 @@ for the permission-only integration policy.
 
 ## Maven Central publishing status
 
-Not yet published. Release `0.1.0` is prepared for publication to
-[Maven Central](https://central.sonatype.com/) via the Sonatype Central
-Publisher Portal. This README will be updated with the live coordinates once the
-artifact is available. Publishing steps are documented in
-[CONTRIBUTING.md](CONTRIBUTING.md).
+Published. `io.github.usmanovmahmudkhan:campus-auth-java:0.1.0` is available on
+[Maven Central](https://central.sonatype.com/artifact/io.github.usmanovmahmudkhan/campus-auth-java/0.1.0).
+Publishing steps are documented in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
