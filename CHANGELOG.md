@@ -1,38 +1,42 @@
 # Changelog
 
-All notable changes to `campus-auth-java` are documented here.
+All notable changes to `campus-auth-java` are documented here. The format is
+based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this
+project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 0.2.7 - 2026-05-18
+## 0.1.0 - 2026-06-07
 
-- Polished the README, documentation website, and release notes for the corrected public release.
-- Added community health files for contributing, support, security, roadmap, and conduct.
-- Added Netlify multi-page documentation routing.
-- Kept all package and command references aligned to `0.2.7`.
+Initial public release. This release reworks the project into a safe,
+demo-first JVM package suitable for Maven Central. Earlier pre-public iterations
+that targeted real campus login systems were removed; see the notes below.
 
-## 0.2.6 - 2026-05-18
+### Added
 
-- Added production-style documentation under `docs/`.
-- Added deployment configuration for Netlify.
-- Added project disclaimer for educational, research, and authorized testing use only.
-- Added GitHub-ready release notes.
+- Public API: `CampusAuthClient`, `AuthProvider`, `AuthRequest`, `AuthResult`,
+  `CampusMember`, `CampusRole`, `CampusAuthException`,
+  `InvalidCredentialsException`, `ProviderUnavailableException`.
+- `DemoAuthProvider`: a safe, fully in-memory provider with a default
+  `demo-student` / `demo-password` account and constant-time comparison.
+- A minimal CLI (`verify --provider demo --id <id>`) that reads the password
+  without echo and never prints or logs it.
+- JUnit 5 test suite covering success, failure, validation, exceptions, the
+  public API, and the CLI.
+- Maven Central publishing setup: source jar, javadoc jar, GPG signing, and the
+  Sonatype `central-publishing-maven-plugin` (in a `release` profile).
+- GitHub Actions for CI (`mvn -B clean verify`) and manual release.
 
-## 0.2.0 - 2026-05-18
+### Changed
 
-- Added authenticator implementations for Portal SSO, Classic Session, Moodler Session, and DoSejong Session flows.
-- Added manual fallback mode across supported authenticators.
-- Added structured response models for authentication results and metadata.
-- Added compatibility helper methods in `LegacyAuth`.
+- Coordinates are now `io.github.usmanovmahmudkhan:campus-auth-java:0.1.0`.
+- Java baseline raised to 17.
+- Package renamed to `io.github.usmanovmahmudkhan.campusauth`.
 
-## 0.1.1 - 2026-05-18
+### Removed
 
-- Added CLI password prompt support.
-- Added structured JSON output for command-line use.
-- Added result codes for success, failures, timeouts, and unknown outcomes.
-- Improved command usage messages.
-
-## 0.1.0 - 2026-05-18
-
-- Added the initial Maven Java 11 project structure.
-- Added the core authentication service and method enum.
-- Added JSoup dependency for HTML parsing.
-- Added MIT license and baseline repository documentation.
+- All real-system authenticators and scrapers (Portal SSO, Classic, Moodler,
+  DoSejong) and the `LegacyAuth` helpers. They targeted live third-party
+  endpoints and parsed authenticated session pages, which is unsafe to ship and
+  out of scope for a demo package. Real integrations must be implemented
+  privately by authorized applications via the `AuthProvider` interface.
+- The `jsoup` dependency, which was only used by the removed scrapers.
+- The marketing documentation website that described those authenticators.

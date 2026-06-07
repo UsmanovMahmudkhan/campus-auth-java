@@ -1,165 +1,142 @@
-<div align="center">
-  <a href="https://commons.wikimedia.org/wiki/File:Sejong_univ.png">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/0/0f/Sejong_univ.png" alt="Sejong University logo" width="104" />
-  </a>
-  <h1>Campus Auth Java</h1>
-  <p><b>A lightweight Java library and CLI for campus member account authentication workflows.</b></p>
+# campus-auth-java
 
-  <p>
-    <img src="https://img.shields.io/badge/Java-11%2B-blue?logo=openjdk&logoColor=white" alt="Java 11+" />
-    <img src="https://img.shields.io/badge/Maven-3.8%2B-red?logo=apachemaven&logoColor=white" alt="Maven 3.8+" />
-    <img src="https://img.shields.io/badge/Release-v0.2.7-0f766e" alt="Release v0.2.7" />
-    <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License: MIT" />
-  </p>
+A small, demo-first JVM toolkit that models campus-style member verification
+workflows. It gives applications a clean API and a simple CLI for verifying a
+member id and secret against a pluggable provider, and ships one safe,
+fully in-memory provider out of the box.
 
-  <p>
-    <a href="https://campus-auth-java.netlify.app">Documentation</a>
-    ·
-    <a href="https://campus-auth-java.netlify.app/quickstart/">Quickstart</a>
-    ·
-    <a href="https://github.com/UsmanovMahmudkhan/campus-auth-java/releases/tag/v0.2.7">Latest release</a>
-  </p>
-</div>
+> **Disclaimer**
+>
+> This project is not affiliated with, endorsed by, or officially connected to
+> Sejong University. It is an educational/demo JVM package for campus-style
+> authentication and member-verification workflows. Do not use it to automate,
+> bypass, attack, or abuse real university authentication systems.
 
-> This project is not affiliated with, endorsed by, or officially maintained by Sejong University.
+## Installation
 
-## Table of Contents
+### Maven
 
-- [About](#about)
-- [Features](#features)
-- [Quickstart](#quickstart)
-- [CLI Usage](#cli-usage)
-- [Java API](#java-api)
-- [Authentication Methods](#authentication-methods)
-- [Security and Disclaimer](#security-and-disclaimer)
-- [Documentation](#documentation)
-- [Contributing](#contributing)
-
-## About
-
-**Campus Auth Java** wraps session-based campus login checks behind a small Java 11 toolkit. It handles HTTP requests, cookies, redirects, HTML parsing, fallback authentication methods, and structured JSON output so applications can make clear decisions from authentication results.
-
-Use it when you need a local CLI or Java API for authorized campus-account verification experiments, club tools, or research prototypes.
-
-## Features
-
-- **Multiple authentication strategies:** Portal SSO, Classic Session, Moodler Session, and DoSejong Session.
-- **Manual fallback mode:** Try supported methods in order until a definite result is found.
-- **Structured JSON output:** Consistent success, status, result code, authenticator, and metadata fields.
-- **Library and CLI support:** Use from Java code or package a runnable shaded jar.
-- **Small dependency surface:** Java `HttpClient` plus JSoup for HTML parsing.
-- **Extensible design:** Add new authenticators behind the shared `Authenticator` contract.
-
-## Quickstart
-
-### Prerequisites
-
-- JDK 11 or newer
-- Maven 3.8 or newer
-
-### Build
-
-```bash
-git clone https://github.com/UsmanovMahmudkhan/campus-auth-java.git
-cd campus-auth-java
-mvn clean package
+```xml
+<dependency>
+  <groupId>io.github.usmanovmahmudkhan</groupId>
+  <artifactId>campus-auth-java</artifactId>
+  <version>0.1.0</version>
+</dependency>
 ```
 
-The shaded jar is generated at:
+### Gradle
 
-```text
-target/campus-auth-java-0.2.7.jar
+```kotlin
+implementation("io.github.usmanovmahmudkhan:campus-auth-java:0.1.0")
 ```
 
-## CLI Usage
+Requires Java 17 or newer.
 
-Run automatic fallback mode:
-
-```bash
-java -jar target/campus-auth-java-0.2.7.jar <student_id> <password>
-```
-
-Use the interactive password prompt:
-
-```bash
-java -jar target/campus-auth-java-0.2.7.jar <student_id>
-```
-
-Run one or more selected authenticators:
-
-```bash
-java -jar target/campus-auth-java-0.2.7.jar <student_id> <password> PortalSSOToken
-java -jar target/campus-auth-java-0.2.7.jar <student_id> <password> PortalSSOToken,DosejongSession
-```
-
-## Java API
+## Quick start
 
 ```java
-import campus.auth.java.AuthMethod;
-import campus.auth.java.AuthResponse;
-import campus.auth.java.AuthResult;
-import campus.auth.java.AuthService;
+import io.github.usmanovmahmudkhan.campusauth.*;
 
-public class App {
-    public static void main(String[] args) {
-        AuthResult fallback = AuthService.authenticate("student_id", "password");
-        System.out.println(fallback.toJson());
+CampusAuthClient client = CampusAuthClient.withProvider(new DemoAuthProvider());
 
-        AuthResponse portal = AuthService.authenticate(
-            "student_id",
-            "password",
-            AuthMethod.PORTAL_SSO_TOKEN
-        );
-        System.out.println(portal.getIsAuth());
-    }
+AuthResult result = client.verify(
+    AuthRequest.of("demo-student", "demo-password")
+);
+
+if (result.isAuthenticated()) {
+    System.out.println(result.member().id());
 }
 ```
 
-## Authentication Methods
+The bundled `DemoAuthProvider` knows one account by default:
 
-| Method | Purpose | Extracted Metadata |
-| :--- | :--- | :--- |
-| `Manual` | Cascades through supported methods. | Varies by successful method |
-| `PortalSSOToken` | Checks portal SSO token behavior via Blackboard. | Authentication status |
-| `ClassicSession` | Checks Daeyang Humanity College session flow. | Classic reading certification |
-| `MoodlerSession` | Checks SJULMS Moodler session login. | Name, major |
-| `DosejongSession` | Checks Do Sejong session login. | Name, major |
+| id             | password        | role    |
+| -------------- | --------------- | ------- |
+| `demo-student` | `demo-password` | STUDENT |
 
-Legacy helper methods remain available in `LegacyAuth` for backward compatibility: `dosejongApi`, `uisApi`, and `sjlmsApi`.
+Register more demo accounts as needed:
 
-## Security and Disclaimer
+```java
+DemoAuthProvider provider = new DemoAuthProvider()
+    .withAccount("demo-faculty", "demo-secret",
+        CampusMember.of("demo-faculty", "Demo Faculty", CampusRole.FACULTY));
+```
 
-Credentials are passed at runtime through CLI arguments, an interactive prompt, or Java method calls. Never hardcode real credentials, commit `.env` files, or use the project against accounts or services you are not authorized to test.
+## CLI usage
 
-This project is provided strictly for educational, research, and authorized testing purposes only.
+The build produces a runnable jar with a single `verify` command:
 
-It must not be used for illegal activities, unauthorized access, privacy violations, abuse, harassment, disruption of services, or any activity that violates applicable laws, platform rules, or third-party rights.
+```bash
+java -jar campus-auth-java-0.1.0.jar verify --provider demo --id demo-student
+```
 
-The developer does not encourage, support, or take responsibility for any misuse of this project. Users are solely responsible for how they use, modify, or distribute this code. By using this project, you agree that you are responsible for ensuring your actions are legal, ethical, and authorized.
+You will be prompted for the password without echo. You may also pass
+`--password <secret>` for non-interactive use (for example in tests). The CLI
+never prints or logs the secret.
 
-If you are unsure whether your use is allowed, do not use this project.
+```
+Authenticated: demo-student (STUDENT)
+```
 
-## Documentation
+Exit codes: `0` authenticated, `1` not authenticated, `2` usage or input error.
 
-- [Documentation website](https://campus-auth-java.netlify.app)
-- [Quickstart](https://campus-auth-java.netlify.app/quickstart/)
-- [API guide](https://campus-auth-java.netlify.app/api/)
-- [Security notes](SECURITY.md)
-- [Roadmap](ROADMAP.md)
-- [Changelog](CHANGELOG.md)
-- [Release notes](RELEASE_NOTES.md)
+## API overview
 
-## Contributing
+| Type                           | Purpose                                                      |
+| ------------------------------ | ----------------------------------------------------------- |
+| `CampusAuthClient`             | Entry point; wraps a provider and exposes `verify`.         |
+| `AuthProvider`                 | Strategy interface for verifying a request.                 |
+| `AuthRequest`                  | Immutable id + secret; the secret can be cleared.           |
+| `AuthResult`                   | Outcome of a verification (authenticated or failed).        |
+| `CampusMember`                 | Non-sensitive identity metadata for a verified member.      |
+| `CampusRole`                   | `STUDENT`, `FACULTY`, `STAFF`, `GUEST`.                     |
+| `DemoAuthProvider`             | Safe, in-memory provider used by the examples and tests.    |
+| `CampusAuthException`          | Base unchecked exception.                                   |
+| `InvalidCredentialsException`  | Raised when a verified member is read from a failed result. |
+| `ProviderUnavailableException` | Raised when a provider cannot service the request.          |
 
-Contributions are welcome when they improve reliability, safety, documentation, or maintainability. Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request and follow the [Code of Conduct](CODE_OF_CONDUCT.md).
+`verify` returns a failed `AuthResult` for well-formed-but-incorrect
+credentials (no exception). Calling `result.member()` on a failed result throws
+`InvalidCredentialsException`, so guard it with `isAuthenticated()` as shown
+above. Null/blank ids or secrets are rejected by `AuthRequest.of` with
+`IllegalArgumentException`.
+
+## Demo provider
+
+`DemoAuthProvider` is the default and only bundled provider. It is entirely
+in-memory, performs constant-time password comparison, and talks to no external
+service. It exists so the API, examples, and tests run anywhere without
+credentials or network access. Do not place real credentials in it.
+
+To integrate a real member directory, implement `AuthProvider` yourself inside
+the application that owns and is authorized to use that system. This package
+intentionally ships no real-system integration. See [SECURITY.md](SECURITY.md)
+for the permission-only integration policy.
+
+## Security notes
+
+- No real credentials, student ids, passwords, tokens, cookies, or session
+  material are stored in this repository.
+- `AuthRequest` holds the secret as a `char[]` and supports `clear()`.
+- The CLI reads the password without echo and never prints or logs it.
+- See [SECURITY.md](SECURITY.md) for reporting and integration policy.
+
+## What this project is not
+
+- It is not a login client for any real university or service.
+- It does not scrape, brute force, bypass, or automate any real authentication
+  system.
+- It is not affiliated with or endorsed by Sejong University or any institution.
+- It is not a credential store and must not be used to hold real secrets.
+
+## Maven Central publishing status
+
+Not yet published. Release `0.1.0` is prepared for publication to
+[Maven Central](https://central.sonatype.com/) via the Sonatype Central
+Publisher Portal. This README will be updated with the live coordinates once the
+artifact is available. Publishing steps are documented in
+[CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
-Distributed under the MIT License. See [LICENSE](LICENSE) for details.
-
-## Author
-
-**Mahmudkhan Usmanov**
-
-- GitHub: [@UsmanovMahmudkhan](https://github.com/UsmanovMahmudkhan)
-- LinkedIn: [Mahmudkhan Usmanov](https://www.linkedin.com/in/mahmudkhon-u-57b202249/)
+Released under the [MIT License](LICENSE).

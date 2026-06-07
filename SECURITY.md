@@ -1,30 +1,54 @@
 # Security Policy
 
-## Supported Versions
+## Supported versions
 
 | Version | Supported |
-| :--- | :--- |
-| `0.2.7` | Yes |
-| Earlier versions | No |
+| :------ | :-------- |
+| `0.1.0` | Yes       |
 
-## Responsible Disclosure
+## Intended use
 
-Please do not open public issues for vulnerabilities, credential leaks, bypass techniques, or sensitive service behavior.
+This project is an educational/demo JVM package. It ships only an in-memory
+demo provider and performs no real authentication. It is not affiliated with
+Sejong University or any institution.
 
-Report security concerns privately to the maintainer through the contact information listed in the repository profile. Include:
+**Do not use this project, or any provider you build on top of it, to automate,
+bypass, brute force, scrape, or otherwise attack a real authentication system
+you are not explicitly authorized to test.** Unauthorized access, privacy
+violations, abuse, and disruption are out of scope and unsupported.
+
+## Permission-only integration policy
+
+The package intentionally contains no integration with any real campus,
+university, or third-party login system. If you implement a custom
+`AuthProvider` against a real directory:
+
+- You must own the system or have explicit written authorization to integrate
+  with it.
+- Keep that integration in your own application, not in this repository or any
+  public example.
+- Never commit real endpoints, headers, cookies, tokens, or credentials.
+
+## Do not submit real credentials
+
+Never put real credentials, real student or staff ids, passwords, tokens,
+cookies, session data, or private endpoint details into issues, pull requests,
+logs, screenshots, tests, or code. Use the demo values
+(`demo-student` / `demo-password`) for all examples and reports. If you
+accidentally expose a secret, rotate it immediately.
+
+## Responsible disclosure
+
+Please do not open public issues for vulnerabilities, credential leaks, or
+bypass techniques.
+
+Report security concerns privately through GitHub's
+[private vulnerability reporting](https://github.com/UsmanovMahmudkhan/campus-auth-java/security/advisories/new)
+for this repository. Include:
 
 - A short description of the issue.
-- Steps to reproduce using non-sensitive test data.
+- Steps to reproduce using only non-sensitive demo data.
 - The affected version or commit.
 - Any suggested fix or mitigation.
 
-## Credential Safety
-
-- Never commit real credentials, tokens, cookies, private identifiers, or session data.
-- Prefer the interactive CLI password prompt for local use.
-- Redact secrets and personal information from logs, screenshots, issues, and pull requests.
-- Do not run the tool against accounts, systems, or services unless you are authorized to do so.
-
-## Intended Use
-
-This project is provided strictly for educational, research, and authorized testing purposes only. Misuse for unauthorized access, privacy violations, abuse, harassment, disruption, or illegal activity is not supported.
+We aim to acknowledge reports within a few business days.

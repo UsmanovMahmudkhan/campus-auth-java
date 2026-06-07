@@ -1,50 +1,71 @@
 # Contributing
 
-Thank you for helping improve Campus Auth Java. Contributions should make the project safer, clearer, easier to maintain, or more reliable for authorized use.
+Thank you for helping improve campus-auth-java. Contributions should make the
+project safer, clearer, easier to maintain, or more reliable.
 
-## Ground Rules
+## Ground rules
 
 - Follow the [Code of Conduct](CODE_OF_CONDUCT.md).
-- Do not submit code that enables abuse, unauthorized access, privacy violations, or credential misuse.
-- Do not include real credentials, tokens, cookies, student data, private screenshots, or logs containing personal information.
-- Keep changes focused. Separate unrelated refactors, docs edits, and behavior changes into different pull requests when practical.
+- Do not submit code that enables abuse, unauthorized access, privacy
+  violations, or credential misuse.
+- Do not add integrations that log into, scrape, or automate real third-party
+  authentication systems. See [SECURITY.md](SECURITY.md).
+- Never include real credentials, tokens, cookies, real ids, private endpoints,
+  screenshots, or logs containing personal data. Use the demo values only.
+- Keep changes focused; separate unrelated refactors and behavior changes.
 
-## Local Setup
+## Local setup
 
 ```bash
 git clone https://github.com/UsmanovMahmudkhan/campus-auth-java.git
 cd campus-auth-java
-mvn clean package
+mvn -B clean verify
 ```
 
-The project requires JDK 11 or newer and Maven 3.8 or newer.
+Requires JDK 17 or newer and Maven 3.8 or newer.
 
-## Branches and Commits
+## Pull request checklist
 
-- Use descriptive branch names such as `feature/add-authenticator`, `fix/json-output`, or `docs/security-notes`.
-- Write short commit messages that describe the user-visible change.
-- Keep generated build output out of commits. The `target/` directory is ignored.
+- Run `mvn -B clean verify` and confirm it passes.
+- Add or update tests for the behavior you touch.
+- Update `README.md` and `CHANGELOG.md` when behavior changes.
+- Confirm no secrets, cookies, real ids, or personal data are included.
+- Explain what changed, why, and how you verified it.
 
-## Pull Request Checklist
+## Releasing to Maven Central
 
-Before opening a pull request:
+Releases are published to Maven Central through the Sonatype Central Publisher
+Portal. The `release` Maven profile enables GPG signing and the
+`central-publishing-maven-plugin`.
 
-- Run `mvn clean package`.
-- Update `README.md`, `CHANGELOG.md`, or docs pages when behavior changes.
-- Add or update tests when the project has test coverage for the touched behavior.
-- Confirm no secrets, cookies, private identifiers, or personal data are included.
-- Explain what changed, why it changed, and how it was verified.
+One-time setup:
 
-## Adding an Authenticator
+1. Create an account at [central.sonatype.com](https://central.sonatype.com/).
+2. Verify the namespace `io.github.usmanovmahmudkhan` (GitHub namespaces are
+   verified by proving ownership of the matching GitHub account).
+3. Generate a Central Portal user token (username + password pair).
+4. Generate a GPG key, publish its public part to a keyserver, and export the
+   private key.
+5. Add the repository secrets listed below.
 
-New authenticators should:
+Required GitHub Actions secrets:
 
-- Implement the shared `Authenticator` contract.
-- Return structured `AuthResponse` data with clear result codes.
-- Use explicit timeouts and avoid indefinite network waits.
-- Treat unknown service responses as unknown, not as credential failures.
-- Avoid logging credentials, tokens, cookies, or private metadata.
+| Secret             | Purpose                                  |
+| ------------------ | ---------------------------------------- |
+| `CENTRAL_USERNAME` | Central Portal token username            |
+| `CENTRAL_PASSWORD` | Central Portal token password            |
+| `GPG_PRIVATE_KEY`  | ASCII-armored exported private key        |
+| `GPG_PASSPHRASE`   | Passphrase for that key                  |
 
-## Security Reports
+To publish, run the **Release** workflow from the Actions tab
+(`workflow_dispatch`). It builds, signs, and uploads `0.1.0` with
+`mvn -B -Prelease deploy`. A local equivalent:
 
-Do not open public issues for sensitive vulnerabilities. Use the process in [SECURITY.md](SECURITY.md).
+```bash
+mvn -B -Prelease clean deploy
+```
+
+## Security reports
+
+Do not open public issues for sensitive vulnerabilities. Use the process in
+[SECURITY.md](SECURITY.md).
