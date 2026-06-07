@@ -6,19 +6,17 @@ For general questions, open a GitHub issue with enough detail for someone to rep
 
 Good support requests include:
 
-- Project version, such as `0.2.7`.
+- Project version, such as `0.1.0`.
 - Java and Maven versions.
 - Operating system.
 - Command or API call used.
-- Sanitized output or error message.
-- The authenticator method involved, if known.
+- Sanitized output or error message, using only demo data.
 
 ## Before Opening an Issue
 
 - Read the [README](README.md).
-- Check the [documentation website](https://campus-auth-java.netlify.app).
 - Search existing issues and releases.
-- Run `mvn clean package` to confirm the project builds locally.
+- Run `mvn -B clean verify` to confirm the project builds locally.
 
 ## Security Issues
 
